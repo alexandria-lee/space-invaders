@@ -3,21 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Space Invaders</title>
+<title>Castle Siege</title>
 <style>
   :root {
-    --bg: #05060a;
-    --panel: #0b0f1a;
-    --accent: #38ff8e;
-    --accent-dim: #1d8a4d;
-    --danger: #ff4d5e;
-    --text: #d7e3ff;
+    --bg: #080604;
+    --panel: #120e08;
+    --accent: #e8a830;
+    --accent-dim: #7a5210;
+    --danger: #cc3322;
+    --text: #e8d8b8;
   }
   * { box-sizing: border-box; }
   html, body {
     margin: 0;
     height: 100%;
-    background: radial-gradient(circle at 50% 20%, #0d1224 0%, var(--bg) 70%);
+    background: radial-gradient(circle at 50% 20%, #1a100a 0%, var(--bg) 70%);
     color: var(--text);
     font-family: "Courier New", ui-monospace, monospace;
     display: flex;
@@ -47,8 +47,8 @@
     position: relative;
     border: 2px solid var(--accent-dim);
     border-radius: 8px;
-    box-shadow: 0 0 24px rgba(56,255,142,0.15), inset 0 0 40px rgba(0,0,0,0.6);
-    background: linear-gradient(180deg, #04050b 0%, #070a14 100%);
+    box-shadow: 0 0 24px rgba(232,168,48,0.15), inset 0 0 40px rgba(0,0,0,0.6);
+    background: linear-gradient(180deg, #060402 0%, #0e0906 100%);
   }
   canvas { display: block; border-radius: 6px; }
   #overlay {
@@ -70,7 +70,7 @@
     font-size: 42px;
     letter-spacing: 6px;
     color: var(--accent);
-    text-shadow: 0 0 18px rgba(56,255,142,0.6);
+    text-shadow: 0 0 18px rgba(232,168,48,0.6);
   }
   #overlay h2 { margin: 0; font-size: 24px; color: var(--danger); letter-spacing: 3px; }
   #overlay p { margin: 4px 0; font-size: 14px; line-height: 1.7; opacity: 0.85; }
@@ -86,7 +86,7 @@
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    box-shadow: 0 0 18px rgba(56,255,142,0.5);
+    box-shadow: 0 0 18px rgba(232,168,48,0.5);
     transition: transform 0.08s ease;
   }
   #overlay button:hover { transform: scale(1.05); }
@@ -112,10 +112,10 @@
   <div id="stage">
     <canvas id="game" width="640" height="640"></canvas>
     <div id="overlay">
-      <h1>SPACE INVADERS</h1>
+      <h1>CASTLE SIEGE</h1>
       <p>Move with <kbd>←</kbd> <kbd>→</kbd> or <kbd>A</kbd> <kbd>D</kbd></p>
       <p>Fire with <kbd>Space</kbd> &nbsp;·&nbsp; Pause with <kbd>P</kbd></p>
-      <p>Clear the swarm before it reaches you. Hide behind the bunkers.</p>
+      <p>Defend the realm. Shoot down the horde before it reaches your cannon.</p>
       <button id="startBtn">Start</button>
     </div>
   </div>
@@ -314,7 +314,7 @@
 
     // Player shooting
     if (keys.fire && now - lastShot > player.cooldown) {
-      bullets.push({ x: player.x + player.w / 2 - 2, y: player.y - 6, w: 4, h: 12, vy: -9 });
+      bullets.push({ x: player.x + player.w / 2 - 3, y: player.y - 6, w: 6, h: 6, vy: -9 });
       lastShot = now;
       beep(880, 0.08, 'square', 0.03);
     }
@@ -370,7 +370,7 @@
       const shooters = Object.values(cols);
       if (shooters.length) {
         const s = shooters[(Math.random() * shooters.length) | 0];
-        enemyBullets.push({ x: s.x + s.w / 2 - 2, y: s.y + s.h, w: 4, h: 12, vy: 5 + wave * 0.3 });
+        enemyBullets.push({ x: s.x + s.w / 2 - 2, y: s.y + s.h, w: 5, h: 5, vy: 5 + wave * 0.3 });
       }
     }
 
@@ -403,7 +403,7 @@
         if (rectsOverlap(b, e)) {
           e.alive = false; b.dead = true;
           score += e.points;
-          spawnParticles(e.x + e.w / 2, e.y + e.h / 2, e.type === 2 ? '#ff7adf' : e.type === 1 ? '#7ad0ff' : '#38ff8e');
+          spawnParticles(e.x + e.w / 2, e.y + e.h / 2, e.type === 2 ? '#9a9a7a' : e.type === 1 ? '#c87840' : '#7ab830');
           beep(220, 0.12, 'triangle', 0.04);
           break;
         }
@@ -416,7 +416,7 @@
         if (rectsOverlap(b, mysteryShip)) {
           b.dead = true;
           score += mysteryShip.points;
-          spawnParticles(mysteryShip.x + mysteryShip.w / 2, mysteryShip.y + mysteryShip.h / 2, '#ffd24d', 22);
+          spawnParticles(mysteryShip.x + mysteryShip.w / 2, mysteryShip.y + mysteryShip.h / 2, '#ff6600', 22);
           beep(660, 0.2, 'sawtooth', 0.05);
           mysteryShip = null;
           mysteryTimer = randRange(12000, 22000);
@@ -430,7 +430,7 @@
           if (blk.hp <= 0) continue;
           if (rectsOverlap(b, { x: blk.x, y: blk.y, w: blk.s, h: blk.s })) {
             blk.hp--; b.dead = true;
-            spawnParticles(blk.x + blk.s / 2, blk.y + blk.s / 2, '#5a6f9e', 5);
+            spawnParticles(blk.x + blk.s / 2, blk.y + blk.s / 2, '#808070', 5);
             return true;
           }
         }
@@ -460,7 +460,7 @@
   function loseLife(reachedBottom) {
     lives--;
     flashTimer = 350;
-    spawnParticles(player.x + player.w / 2, player.y + player.h / 2, '#ff4d5e', 26);
+    spawnParticles(player.x + player.w / 2, player.y + player.h / 2, '#cc3322', 26);
     beep(90, 0.4, 'sawtooth', 0.06);
     updateHud();
     if (lives <= 0 || reachedBottom) {
@@ -511,40 +511,40 @@
   }
 
   // ---- Render ----
-  // Pre-rendered invader pixel shapes (8x8-ish) per type & frame
+  // Fantasy enemy shapes: Goblin / Orc / Troll
   const SHAPES = {
-    0: [ // small
+    0: [ // Goblin (small, pointy ears, big eyes)
       [[0,0,1,0,0,1,0,0],
-       [0,0,0,1,1,0,0,0],
+       [0,1,1,1,1,1,1,0],
+       [1,0,0,1,1,0,0,1],
+       [0,1,1,1,1,1,1,0],
        [0,0,1,1,1,1,0,0],
-       [0,1,1,0,1,1,1,0],
-       [1,1,1,1,1,1,1,1],
-       [1,0,1,1,1,1,0,1],
-       [1,0,1,0,0,1,0,1],
-       [0,0,1,1,1,1,0,0]],
+       [0,1,1,0,0,1,1,0],
+       [0,0,1,1,1,1,0,0],
+       [0,0,1,0,0,1,0,0]],
     ],
-    1: [ // medium (crab)
-      [[0,0,1,0,0,0,0,1,0,0],
-       [0,0,0,1,0,0,1,0,0,0],
+    1: [ // Orc (medium, broad, tusks)
+      [[0,0,0,1,1,1,1,0,0,0],
        [0,0,1,1,1,1,1,1,0,0],
        [0,1,1,0,1,1,0,1,1,0],
+       [1,0,1,1,0,0,1,1,0,1],
+       [1,1,0,1,1,1,1,0,1,1],
+       [0,1,1,1,1,1,1,1,1,0],
+       [0,0,1,1,0,0,1,1,0,0],
+       [0,0,1,0,0,0,0,1,0,0]],
+    ],
+    2: [ // Troll (big, blocky, massive)
+      [[0,0,1,1,1,1,1,1,0,0],
+       [0,1,1,1,1,1,1,1,1,0],
+       [1,1,0,1,0,0,1,0,1,1],
+       [1,1,1,1,1,1,1,1,1,1],
        [1,1,1,1,1,1,1,1,1,1],
        [1,0,1,1,1,1,1,1,0,1],
-       [1,0,1,0,0,0,0,1,0,1],
-       [0,0,0,1,1,1,1,0,0,0]],
-    ],
-    2: [ // big (squid/top)
-      [[0,0,0,1,1,1,1,0,0,0],
-       [0,1,1,1,1,1,1,1,1,0],
-       [1,1,1,1,1,1,1,1,1,1],
-       [1,1,1,0,0,0,0,1,1,1],
-       [1,1,1,1,1,1,1,1,1,1],
-       [0,0,1,1,0,0,1,1,0,0],
-       [0,1,1,0,1,1,0,1,1,0],
-       [1,1,0,0,0,0,0,0,1,1]],
+       [0,0,0,1,1,1,1,0,0,0],
+       [0,0,1,0,1,1,0,1,0,0]],
     ],
   };
-  const TYPE_COLOR = { 0: '#38ff8e', 1: '#7ad0ff', 2: '#ff7adf' };
+  const TYPE_COLOR = { 0: '#7ab830', 1: '#c87840', 2: '#9a9a7a' };
 
   function drawInvader(e, frame) {
     const grid = SHAPES[e.type][0];
@@ -575,10 +575,10 @@
   function render(now) {
     ctx.clearRect(0, 0, W, H);
 
-    // Starfield
+    // Starfield (moonlit night sky — warm tones)
     for (const st of starField) {
       const tw = 0.4 + 0.6 * Math.abs(Math.sin(now / 700 + st.t * 6));
-      ctx.fillStyle = `rgba(180,200,255,${0.15 + tw * 0.35})`;
+      ctx.fillStyle = `rgba(220,210,180,${0.12 + tw * 0.3})`;
       ctx.fillRect(st.x, st.y, st.s, st.s);
     }
 
@@ -586,11 +586,11 @@
 
     const frame = Math.floor(now / 400) % 2;
 
-    // Bunkers
+    // Bunkers (stone walls)
     for (const blocks of bunkers) {
       for (const blk of blocks) {
         if (blk.hp <= 0) continue;
-        const shade = blk.hp === 3 ? '#38ff8e' : blk.hp === 2 ? '#27b568' : '#176e3f';
+        const shade = blk.hp === 3 ? '#909088' : blk.hp === 2 ? '#606058' : '#404038';
         ctx.fillStyle = shade;
         ctx.fillRect(blk.x, blk.y, blk.s, blk.s);
       }
@@ -599,35 +599,88 @@
     // Enemies
     for (const e of enemies) if (e.alive) drawInvader(e, frame);
 
-    // Mystery ship
+    // Mystery ship (Dragon)
     if (mysteryShip) {
       const m = mysteryShip;
-      ctx.fillStyle = '#ffd24d';
-      ctx.fillRect(m.x + 6, m.y + 6, m.w - 12, m.h - 10);
-      ctx.fillRect(m.x, m.y + 10, m.w, m.h - 12);
-      ctx.fillRect(m.x + 12, m.y + 2, m.w - 24, 6);
-      ctx.fillStyle = '#05060a';
-      ctx.fillRect(m.x + 10, m.y + 12, 4, 4);
-      ctx.fillRect(m.x + m.w - 14, m.y + 12, 4, 4);
+      const facingRight = m.vx > 0;
+      // Body
+      ctx.fillStyle = '#b82010';
+      ctx.fillRect(m.x + 8, m.y + 6, m.w - 16, m.h - 8);
+      // Wing
+      ctx.fillStyle = '#7a1008';
+      ctx.fillRect(m.x + m.w / 2 - 10, m.y, 20, 8);
+      ctx.fillRect(m.x + m.w / 2 - 6, m.y - 4, 12, 4);
+      if (facingRight) {
+        // Head right
+        ctx.fillStyle = '#b82010';
+        ctx.fillRect(m.x + m.w - 14, m.y + 4, 14, 10);
+        ctx.fillRect(m.x + m.w - 8, m.y + 12, 8, 4);
+        // Fire breath
+        ctx.fillStyle = '#ff8c00';
+        ctx.fillRect(m.x + m.w, m.y + 8, 8, 4);
+        ctx.fillStyle = '#ffcc00';
+        ctx.fillRect(m.x + m.w + 2, m.y + 9, 4, 2);
+        // Tail left
+        ctx.fillStyle = '#b82010';
+        ctx.fillRect(m.x, m.y + 8, 8, 6);
+        ctx.fillRect(m.x, m.y + 6, 4, 4);
+      } else {
+        // Head left
+        ctx.fillStyle = '#b82010';
+        ctx.fillRect(m.x, m.y + 4, 14, 10);
+        ctx.fillRect(m.x, m.y + 12, 8, 4);
+        // Fire breath
+        ctx.fillStyle = '#ff8c00';
+        ctx.fillRect(m.x - 8, m.y + 8, 8, 4);
+        ctx.fillStyle = '#ffcc00';
+        ctx.fillRect(m.x - 6, m.y + 9, 4, 2);
+        // Tail right
+        ctx.fillStyle = '#b82010';
+        ctx.fillRect(m.x + m.w - 8, m.y + 8, 8, 6);
+        ctx.fillRect(m.x + m.w - 4, m.y + 6, 4, 4);
+      }
+      // Eye
+      ctx.fillStyle = '#ffee00';
+      ctx.fillRect(facingRight ? m.x + m.w - 10 : m.x + 6, m.y + 6, 3, 3);
     }
 
-    // Player (drawn as a little cannon), blink when hit
+    // Player (cannon on wheels), blink when hit
     if (!(flashTimer > 0 && Math.floor(now / 80) % 2 === 0)) {
-      ctx.fillStyle = '#38ff8e';
       const p = player;
-      ctx.fillRect(p.x, p.y + 8, p.w, p.h - 8);
-      ctx.fillRect(p.x + p.w / 2 - 4, p.y, 8, 10);
-      ctx.fillRect(p.x + 6, p.y + 4, p.w - 12, 6);
+      // Wheels
+      ctx.fillStyle = '#5a3010';
+      ctx.fillRect(p.x + 2, p.y + 14, 10, 8);
+      ctx.fillRect(p.x + p.w - 12, p.y + 14, 10, 8);
+      // Wheel spokes
+      ctx.fillStyle = '#3a1c08';
+      ctx.fillRect(p.x + 6, p.y + 15, 2, 6);
+      ctx.fillRect(p.x + 3, p.y + 18, 8, 2);
+      ctx.fillRect(p.x + p.w - 8, p.y + 15, 2, 6);
+      ctx.fillRect(p.x + p.w - 11, p.y + 18, 8, 2);
+      // Cart body
+      ctx.fillStyle = '#a07040';
+      ctx.fillRect(p.x, p.y + 12, p.w, 10);
+      // Barrel mount
+      ctx.fillStyle = '#808090';
+      ctx.fillRect(p.x + 14, p.y + 6, 16, 8);
+      // Barrel
+      ctx.fillStyle = '#585868';
+      ctx.fillRect(p.x + p.w / 2 - 4, p.y, 8, 14);
+      // Barrel mouth (darker ring)
+      ctx.fillStyle = '#383848';
+      ctx.fillRect(p.x + p.w / 2 - 4, p.y, 8, 3);
     }
 
-    // Player bullets
-    ctx.fillStyle = '#eafff2';
-    for (const b of bullets) ctx.fillRect(b.x, b.y, b.w, b.h);
+    // Player bullets (cannonballs)
+    ctx.fillStyle = '#cc7700';
+    for (const b of bullets) {
+      ctx.fillRect(b.x - 1, b.y, 6, 6);
+    }
 
-    // Enemy bullets
-    ctx.fillStyle = '#ff5d6c';
+    // Enemy bullets (thrown rocks)
+    ctx.fillStyle = '#886644';
     for (const b of enemyBullets) {
-      ctx.fillRect(b.x, b.y, b.w, b.h);
+      ctx.fillRect(b.x, b.y, 5, 5);
     }
 
     // Particles
@@ -640,7 +693,7 @@
     ctx.globalAlpha = 1;
 
     // Ground line
-    ctx.fillStyle = 'rgba(56,255,142,0.4)';
+    ctx.fillStyle = 'rgba(160,112,64,0.5)';
     ctx.fillRect(0, H - 30, W, 2);
   }
 
